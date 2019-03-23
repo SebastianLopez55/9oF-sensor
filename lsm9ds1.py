@@ -10,7 +10,7 @@ gyr_addy = 0x6b
 # complete list of register addresses on pages 38-40 of LSM9DS1 datasheet
 # 0x18 = X axis gyroscope Low value
 # 0x19 = X axis gyroscope High value
-gyro_x = ( b.read_byte_data(gyr_addy, 0x19) - b.read_byte_data(gyr_addy, 0x18) ) / 2
-gyro_y = ( b.read_byte_data(gyr_addy, 0x1B) - b.read_byte_data(gyr_addy, 0x1A) ) / 2
-gyro_z = ( b.read_byte_data(gyr_addy, 0x1D) - b.read_byte_data(gyr_addy, 0x1C) ) / 2
-print("gyro_x =", gyro_x, "\tgyro_y =", gyro_y, "\tgryo_z =", gyro_z)
+gyro_x_L = b.read_byte_data(gyr_addy, 0x18)
+gyro_y_L = b.read_byte_data(gyr_addy, 0x1A)
+gyro_z_L = b.read_byte_data(gyr_addy, 0x1C)
+print("gyro_x_L =", gyro_x_L, "\tgyro_y_L =", gyro_y_L, "\tgryo_z_L =", gyro_z_L)
