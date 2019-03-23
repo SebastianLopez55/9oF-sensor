@@ -13,4 +13,8 @@ gyr_addy = 0x6a
 gyro_x_L = b.read_byte_data(gyr_addy, 0x18)
 gyro_y_L = b.read_byte_data(gyr_addy, 0x1A)
 gyro_z_L = b.read_byte_data(gyr_addy, 0x1C)
+gyro_x_H = b.read_byte_data(gyr_addy, 0x19)
+gyro_y_H = b.read_byte_data(gyr_addy, 0x1B)
+gyro_z_H = b.read_byte_data(gyr_addy, 0x1D)
 print("gyro_x_L =", gyro_x_L, "\tgyro_y_L =", gyro_y_L, "\tgryo_z_L =", gyro_z_L)
+print("gyro_x_H =", gyro_x_H, "\tgyro_y_H =", gyro_y_H, "\tgryo_z_H =", gyro_z_H)
