@@ -3,9 +3,9 @@
 from smbus import SMBus
 b = SMBus(1) # instantiate I2C bus 1 for the raspberry pi
 # addresses from datasheet for different parts of the sensor
-mag_addy = 0x1e
-acc_addy = 0x6b
-gyr_addy = 0x6b
+mag_addy = 0x1c
+acc_addy = 0x6a
+gyr_addy = 0x6a
 
 # complete list of register addresses on pages 38-40 of LSM9DS1 datasheet
 # 0x18 = X axis gyroscope Low value
