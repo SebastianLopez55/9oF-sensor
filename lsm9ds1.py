@@ -95,12 +95,12 @@ reg = {
 }
 # data is split up into 2 bytes, thus the H & L suffix in register names.
 # data is organized in little endian format by default
-gyro_x = b.read_byte_data(xlg, reg['OUT_X_L_G']) | ( b.read_byte_data(xlg, reg['OUT_X_L_H_G']) << 8 )
-gyro_y = b.read_byte_data(xlg, reg['OUT_Y_L_G']) | ( b.read_byte_data(xlg, reg['OUT_Y_L_H_G']) << 8 )
-gyro_z = b.read_byte_data(xlg, reg['OUT_Z_L_G']) | ( b.read_byte_data(xlg, reg['OUT_Z_L_H_G']) << 8 )
-accel_x = b.read_byte_data(xlg, reg['OUT_X_L_XL']) | ( b.read_byte_data(xlg, reg['OUT_X_L_H_XL']) << 8 )
-accel_y = b.read_byte_data(xlg, reg['OUT_Y_L_XL']) | ( b.read_byte_data(xlg, reg['OUT_Y_L_H_XL']) << 8 )
-accel_z = b.read_byte_data(xlg, reg['OUT_Z_L_XL']) | ( b.read_byte_data(xlg, reg['OUT_Z_L_H_XL']) << 8 )
+gyro_x = b.read_byte_data(xlg, reg['OUT_X_L_G']) | ( b.read_byte_data(xlg, reg['OUT_X_H_G']) << 8 )
+gyro_y = b.read_byte_data(xlg, reg['OUT_Y_L_G']) | ( b.read_byte_data(xlg, reg['OUT_Y_H_G']) << 8 )
+gyro_z = b.read_byte_data(xlg, reg['OUT_Z_L_G']) | ( b.read_byte_data(xlg, reg['OUT_Z_H_G']) << 8 )
+accel_x = b.read_byte_data(xlg, reg['OUT_X_L_XL']) | ( b.read_byte_data(xlg, reg['OUT_X_H_XL']) << 8 )
+accel_y = b.read_byte_data(xlg, reg['OUT_Y_L_XL']) | ( b.read_byte_data(xlg, reg['OUT_Y_H_XL']) << 8 )
+accel_z = b.read_byte_data(xlg, reg['OUT_Z_L_XL']) | ( b.read_byte_data(xlg, reg['OUT_Z_H_XL']) << 8 )
 mag_x = b.read_byte_data(xlg, reg['OUT_X_L_M']) | ( b.read_byte_data(xlg, reg['OUT_X_H_M']) << 8 )
 mag_y = b.read_byte_data(xlg, reg['OUT_Y_L_M']) | ( b.read_byte_data(xlg, reg['OUT_Y_H_M']) << 8 )
 mag_z = b.read_byte_data(xlg, reg['OUT_Z_L_M']) | ( b.read_byte_data(xlg, reg['OUT_Z_H_M']) << 8 )
