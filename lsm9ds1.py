@@ -104,18 +104,37 @@ b.write_byte_data(xlg, reg['CTRL_REG5_XL'], 0x38)
 b.write_byte_data(xlg, reg['CTRL_REG6_XL'], 0xC0)
 # enable continuous mode for magnetometer
 b.write_byte_data(mag, reg['CTRL_REG3_M'], 0x00)
+'''
+ data is split up into 2 bytes, thus the H & L suffix in register names.
+ data is organized in little endian format by default
+ H << 8 | L registers = a 2s compliment representation of data
+'''
+def twos_complement(input_value, num_bits):
+	# Calculates a two's complement integer from the given input value's bits
+	mask = 2**(num_bits - 1) - 1
+	return -(input_value & mask) + (input_value & ~mask)
 
-# data is split up into 2 bytes, thus the H & L suffix in register names.
-# data is organized in little endian format by default
 gyro_x = b.read_byte_data(xlg, reg['OUT_X_L_G']) | ( b.read_byte_data(xlg, reg['OUT_X_H_G']) << 8 )
+gyro_x = twos_complement(gyro_x, 16)
 gyro_y = b.read_byte_data(xlg, reg['OUT_Y_L_G']) | ( b.read_byte_data(xlg, reg['OUT_Y_H_G']) << 8 )
+gyro_y = twos_complement(gyro_y, 16)
 gyro_z = b.read_byte_data(xlg, reg['OUT_Z_L_G']) | ( b.read_byte_data(xlg, reg['OUT_Z_H_G']) << 8 )
+gyro_z = twos_complement(gyro_z, 16)
+
 accel_x = b.read_byte_data(xlg, reg['OUT_X_L_XL']) | ( b.read_byte_data(xlg, reg['OUT_X_H_XL']) << 8 )
+accel_x = twos_complement(accel_x, 16)
 accel_y = b.read_byte_data(xlg, reg['OUT_Y_L_XL']) | ( b.read_byte_data(xlg, reg['OUT_Y_H_XL']) << 8 )
+accel_y = twos_complement(accel_y, 16)
 accel_z = b.read_byte_data(xlg, reg['OUT_Z_L_XL']) | ( b.read_byte_data(xlg, reg['OUT_Z_H_XL']) << 8 )
+accel_z = twos_complement(accel_z, 16)
+
 mag_x = b.read_byte_data(mag, reg['OUT_X_L_M']) | ( b.read_byte_data(mag, reg['OUT_X_H_M']) << 8 )
+mag_x = twos_complement(mag_x, 16)
 mag_y = b.read_byte_data(mag, reg['OUT_Y_L_M']) | ( b.read_byte_data(mag, reg['OUT_Y_H_M']) << 8 )
+mag_y = twos_complement(mag_y, 16)
 mag_z = b.read_byte_data(mag, reg['OUT_Z_L_M']) | ( b.read_byte_data(mag, reg['OUT_Z_H_M']) << 8 )
+mag_z = twos_complement(mag_z, 16)
+
 print("raw gyro (x y z) =", bin(gyro_x), bin(gyro_y), bin(gyro_z))
 print("raw accel (x y z) =", bin(accel_x), bin(accel_y), bin(accel_z))
 print("raw mag (x y z) =", bin(mag_x), bin(mag_y), bin(mag_z))
