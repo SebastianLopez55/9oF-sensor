@@ -137,4 +137,4 @@ mag_z = twos_complement(mag_z, 16)
 
 print("raw gyro (x y z) =", bin(gyro_x), bin(gyro_y), bin(gyro_z))
 print("raw accel (x y z) =", bin(accel_x), bin(accel_y), bin(accel_z))
-print("raw mag (x y z) =", bin(mag_x), bin(mag_y), bin(mag_z))
+print("raw mag (x y z) =", mag_x, mag_y, mag_z)
