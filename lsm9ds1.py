@@ -94,9 +94,9 @@ reg = {
     'INT_THS_H_M':0x33
 }
 # soft reset & reboot accel/gyro
-b.write_byte_data(xlg, ref['CTRL_REG8'], 0x05)
+b.write_byte_data(xlg, reg['CTRL_REG8'], 0x05)
 # soft reset & reboot magnetometer
-b.write_byte_data(mag, ref['CTRL_REG2_M'], 0x0C)
+b.write_byte_data(mag, reg['CTRL_REG2_M'], 0x0C)
 # enable continuous mode for gyroscope
 b.write_byte_data(xlg, reg['CTRL_REG1_G'], 0xC0)
 # enable continuous mode for accelerometer
