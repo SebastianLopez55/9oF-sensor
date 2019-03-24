@@ -93,6 +93,18 @@ reg = {
     'INT_THS_L_M':0x32,
     'INT_THS_H_M':0x33
 }
+# soft reset & reboot accel/gyro
+b.write_byte_data(xlg, ref['CTRL_REG8'], 0x05)
+# soft reset & reboot magnetometer
+b.write_byte_data(mag, ref['CTRL_REG2_M'], 0x0C)
+# enable continuous mode for gyroscope
+b.write_byte_data(xlg, reg['CTRL_REG1_G'], 0xC0)
+# enable continuous mode for accelerometer
+b.write_byte_data(xlg, reg['CTRL_REG5_XL'], 0x38)
+b.write_byte_data(xlg, reg['CTRL_REG6_XL'], 0xC0)
+# enable continuous mode for magnetometer
+b.write_byte_data(mag, reg['CTRL_REG3_M'], 0x00)
+
 # data is split up into 2 bytes, thus the H & L suffix in register names.
 # data is organized in little endian format by default
 gyro_x = b.read_byte_data(xlg, reg['OUT_X_L_G']) | ( b.read_byte_data(xlg, reg['OUT_X_H_G']) << 8 )
@@ -101,9 +113,9 @@ gyro_z = b.read_byte_data(xlg, reg['OUT_Z_L_G']) | ( b.read_byte_data(xlg, reg['
 accel_x = b.read_byte_data(xlg, reg['OUT_X_L_XL']) | ( b.read_byte_data(xlg, reg['OUT_X_H_XL']) << 8 )
 accel_y = b.read_byte_data(xlg, reg['OUT_Y_L_XL']) | ( b.read_byte_data(xlg, reg['OUT_Y_H_XL']) << 8 )
 accel_z = b.read_byte_data(xlg, reg['OUT_Z_L_XL']) | ( b.read_byte_data(xlg, reg['OUT_Z_H_XL']) << 8 )
-mag_x = b.read_byte_data(xlg, reg['OUT_X_L_M']) | ( b.read_byte_data(xlg, reg['OUT_X_H_M']) << 8 )
-mag_y = b.read_byte_data(xlg, reg['OUT_Y_L_M']) | ( b.read_byte_data(xlg, reg['OUT_Y_H_M']) << 8 )
-mag_z = b.read_byte_data(xlg, reg['OUT_Z_L_M']) | ( b.read_byte_data(xlg, reg['OUT_Z_H_M']) << 8 )
+mag_x = b.read_byte_data(mag, reg['OUT_X_L_M']) | ( b.read_byte_data(mag, reg['OUT_X_H_M']) << 8 )
+mag_y = b.read_byte_data(mag, reg['OUT_Y_L_M']) | ( b.read_byte_data(mag, reg['OUT_Y_H_M']) << 8 )
+mag_z = b.read_byte_data(mag, reg['OUT_Z_L_M']) | ( b.read_byte_data(mag, reg['OUT_Z_H_M']) << 8 )
 print("gyro_x =", gyro_x, "\tgyro_y =", gyro_y, "\tgryo_z =", gyro_z)
 print("accel_x =", accel_x, "\taccel_y =", accel_y, "\taccel_z =", accel_z)
 print("mag_x =", mag_x, "\tmag_y =", mag_y, "\tmag_z =", mag_z)
