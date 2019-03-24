@@ -7,7 +7,8 @@ mag = 0x1c
 xlg = 0x6a
 
 # complete list of register addresses on pages 38-40 of LSM9DS1 datasheet
-reg_XL_G = {
+reg = {
+    # BEGIN ACCELEROMETER/GYROSCOPE REGISTERS
     # Reserved 0x00-0x03
     'ACT_THS':0x04,
     'ACT_DUR':0x05,
@@ -60,10 +61,9 @@ reg_XL_G = {
     'INT_GEN_THS_YL_G':0x34,
     'INT_GEN_THS_ZH_G':0x35,
     'INT_GEN_THS_ZL_G':0x36,
-    'INT_GEN_DUR_G':0x37
+    'INT_GEN_DUR_G':0x37,
     # Reserved 0x38-0x7f
-}
-reg_M = {
+    # BEGIN MAGNETOMETER REGISTERS
     # Reserved 0x00-0x04
     'OFFSET_X_REG_L_M':0x05,
     'OFFSET_X_REG_H_M':0x06,
@@ -93,27 +93,17 @@ reg_M = {
     'INT_THS_L_M':0x32,
     'INT_THS_H_M':0x33
 }
-gyro_x_L = b.read_byte_data(xlg, 0x18)
-gyro_y_L = b.read_byte_data(xlg, 0x1A)
-gyro_z_L = b.read_byte_data(xlg, 0x1C)
-gyro_x_H = b.read_byte_data(xlg, 0x19)
-gyro_y_H = b.read_byte_data(xlg, 0x1B)
-gyro_z_H = b.read_byte_data(xlg, 0x1D)
-accel_x_L = b.read_byte_data(xlg, 0x28)
-accel_y_L = b.read_byte_data(xlg, 0x29)
-accel_z_L = b.read_byte_data(xlg, 0x2A)
-accel_x_H = b.read_byte_data(xlg, 0x2B)
-accel_y_H = b.read_byte_data(xlg, 0x2C)
-accel_z_H = b.read_byte_data(xlg, 0x2D)
-mag_x_L = b.read_byte_data(mag, 0x28)
-mag_y_L = b.read_byte_data(mag, 0x29)
-mag_z_L = b.read_byte_data(mag, 0x2A)
-mag_x_H = b.read_byte_data(mag, 0x2B)
-mag_y_H = b.read_byte_data(mag, 0x2C)
-mag_z_H = b.read_byte_data(mag, 0x2D)
-print("gyro_x_L =", gyro_x_L, "\tgyro_y_L =", gyro_y_L, "\tgryo_z_L =", gyro_z_L)
-print("gyro_x_H =", gyro_x_H, "\tgyro_y_H =", gyro_y_H, "\tgryo_z_H =", gyro_z_H)
-print("accel_x_L =", accel_x_L, "\taccel_y_L =", accel_y_L, "\taccel_z_L =", accel_z_L)
-print("accel_x_H =", accel_x_H, "\taccel_y_H =", accel_y_H, "\taccel_z_H =", accel_z_H)
-print("mag_x_L =", mag_x_L, "\tmag_y_L =", mag_y_L, "\tmag_z_L =", mag_z_L)
-print("mag_x_H =", mag_x_H, "\tmag_y_H =", mag_y_H, "\tmag_z_H =", mag_z_H)
+# data is split up into 2 bytes, thus the H & L suffix in register names.
+# data is organized in little endian format by default
+gyro_x = b.read_byte_data(xlg, reg['OUT_X_L_G']) | ( b.read_byte_data(xlg, reg['OUT_X_L_H_G']) << 8 )
+gyro_y = b.read_byte_data(xlg, reg['OUT_Y_L_G']) | ( b.read_byte_data(xlg, reg['OUT_Y_L_H_G']) << 8 )
+gyro_z = b.read_byte_data(xlg, reg['OUT_Z_L_G']) | ( b.read_byte_data(xlg, reg['OUT_Z_L_H_G']) << 8 )
+accel_x = b.read_byte_data(xlg, reg['OUT_X_L_XL']) | ( b.read_byte_data(xlg, reg['OUT_X_L_H_XL']) << 8 )
+accel_y = b.read_byte_data(xlg, reg['OUT_Y_L_XL']) | ( b.read_byte_data(xlg, reg['OUT_Y_L_H_XL']) << 8 )
+accel_z = b.read_byte_data(xlg, reg['OUT_Z_L_XL']) | ( b.read_byte_data(xlg, reg['OUT_Z_L_H_XL']) << 8 )
+mag_x = b.read_byte_data(xlg, reg['OUT_X_L_M']) | ( b.read_byte_data(xlg, reg['OUT_X_H_M']) << 8 )
+mag_y = b.read_byte_data(xlg, reg['OUT_Y_L_M']) | ( b.read_byte_data(xlg, reg['OUT_Y_H_M']) << 8 )
+mag_z = b.read_byte_data(xlg, reg['OUT_Z_L_M']) | ( b.read_byte_data(xlg, reg['OUT_Z_H_M']) << 8 )
+print("gyro_x =", gyro_x, "\tgyro_y =", gyro_y, "\tgryo_z =", gyro_z)
+print("accel_x =", accel_x, "\taccel_y =", accel_y, "\taccel_z =", accel_z)
+print("mag_x =", mag_x, "\tmag_y =", mag_y, "\tmag_z =", mag_z)
