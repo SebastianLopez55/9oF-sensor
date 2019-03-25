@@ -125,17 +125,11 @@ def axisTuple(buff):
     return (_twos_comp(x, 16), _twos_comp(y, 16), _twos_comp(z, 16))
 
 gyro = axisTuple(b.read_i2c_block_data(xlg, reg['OUT_X_L_G']))
-
-# accel = axisTuple(b.read_i2c_block_data(xlg, reg['OUT_X_L_XL']))
-accel_x = b.read_byte_data(xlg, reg['OUT_X_L_XL']) | ( b.read_byte_data(xlg, reg['OUT_X_H_XL']) << 8 )
-accel_x = _twos_comp(accel_x, 16)
-accel_y = b.read_byte_data(xlg, reg['OUT_Y_L_XL']) | ( b.read_byte_data(xlg, reg['OUT_Y_H_XL']) << 8 )
-accel_y = _twos_comp(accel_y, 16)
-accel_z = b.read_byte_data(xlg, reg['OUT_Z_L_XL']) | ( b.read_byte_data(xlg, reg['OUT_Z_H_XL']) << 8 )
-accel_z = _twos_comp(accel_z, 16)
-
+accel = axisTuple(b.read_i2c_block_data(xlg, reg['OUT_X_L_XL']))
 compass = axisTuple(b.read_i2c_block_data(mag, reg['OUT_X_L_M']))
+temperature = b.read_byte_data(xlg, reg['OUT_TEMP_L']) | ( b.read_byte_data(xlg, reg['OUT_TEMP_H']) << 8 )
 
 print("raw gyro (x y z) =", repr(gyro))
-print("raw accel (x y z) =", bin(accel_x), bin(accel_y), bin(accel_z))
+print("raw accel (x y z) =", repr(accel))
 print("raw mag (x y z) =", repr(compass))
+print('raw temp =', bin(_twos_comp(temperature, 16)))
