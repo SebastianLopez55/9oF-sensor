@@ -122,7 +122,7 @@ def axisTuple(buff):
     x = (buff[1] << 8) | buff[0]
     y = (buff[3] << 8) | buff[2]
     z = (buff[5] << 8) | buff[4]
-    return (_twos_comp(x), _twos_comp(y), _twos_comp(z))
+    return (_twos_comp(x, 16), _twos_comp(y, 16), _twos_comp(z, 16))
 
 gyro = axisTuple(b.read_block_data(xlg, reg['OUT_X_L_G']))
 # gyro_x = b.read_byte_data(xlg, reg['OUT_X_L_G']) | ( b.read_byte_data(xlg, reg['OUT_X_H_G']) << 8 )
