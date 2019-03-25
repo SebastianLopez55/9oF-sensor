@@ -93,6 +93,7 @@ reg = {
     'INT_THS_L_M':0x32,
     'INT_THS_H_M':0x33
 }
+
 # soft reset & reboot accel/gyro
 b.write_byte_data(xlg, reg['CTRL_REG8'], 0x05)
 # soft reset & reboot magnetometer
@@ -104,24 +105,32 @@ b.write_byte_data(xlg, reg['CTRL_REG5_XL'], 0x38)
 b.write_byte_data(xlg, reg['CTRL_REG6_XL'], 0xC0)
 # enable continuous mode for magnetometer
 b.write_byte_data(mag, reg['CTRL_REG3_M'], 0x00)
+
 '''
  data is split up into 2 bytes, thus the H & L suffix in register names.
  data is organized in little endian format by default
  H << 8 | L registers = a 2s compliment representation of data
 '''
+
 def _twos_comp(val, bits):
-    # Convert an unsigned integer in 2's compliment form of the specified bit
-    # length to its signed integer value and return it.
+    # Convert an unsigned integer in 2's compliment form of the specified bit length to its signed integer value and return it.
     if val & (1 << (bits - 1)) != 0:
         return val - (1 << bits)
     return val
 
-gyro_x = b.read_byte_data(xlg, reg['OUT_X_L_G']) | ( b.read_byte_data(xlg, reg['OUT_X_H_G']) << 8 )
-gyro_x = _twos_comp(gyro_x, 16)
-gyro_y = b.read_byte_data(xlg, reg['OUT_Y_L_G']) | ( b.read_byte_data(xlg, reg['OUT_Y_H_G']) << 8 )
-gyro_y = _twos_comp(gyro_y, 16)
-gyro_z = b.read_byte_data(xlg, reg['OUT_Z_L_G']) | ( b.read_byte_data(xlg, reg['OUT_Z_H_G']) << 8 )
-gyro_z = _twos_comp(gyro_z, 16)
+def axisTuple(buff):
+    x = (buff[1] << 8) | buff[0]
+    y = (buff[3] << 8) | buff[2]
+    z = (buff[5] << 8) | buff[4]
+    return (_twos_comp(x), _twos_comp(y), _twos_comp(z))
+
+gyro = axisTuple(b.read_block_data(xlg, reg['OUT_X_L_G']))
+# gyro_x = b.read_byte_data(xlg, reg['OUT_X_L_G']) | ( b.read_byte_data(xlg, reg['OUT_X_H_G']) << 8 )
+# gyro_x = _twos_comp(gyro_x, 16)
+# gyro_y = b.read_byte_data(xlg, reg['OUT_Y_L_G']) | ( b.read_byte_data(xlg, reg['OUT_Y_H_G']) << 8 )
+# gyro_y = _twos_comp(gyro_y, 16)
+# gyro_z = b.read_byte_data(xlg, reg['OUT_Z_L_G']) | ( b.read_byte_data(xlg, reg['OUT_Z_H_G']) << 8 )
+# gyro_z = _twos_comp(gyro_z, 16)
 
 accel_x = b.read_byte_data(xlg, reg['OUT_X_L_XL']) | ( b.read_byte_data(xlg, reg['OUT_X_H_XL']) << 8 )
 accel_x = _twos_comp(accel_x, 16)
@@ -137,6 +146,6 @@ mag_y = _twos_comp(mag_y, 16)
 mag_z = b.read_byte_data(mag, reg['OUT_Z_L_M']) | ( b.read_byte_data(mag, reg['OUT_Z_H_M']) << 8 )
 mag_z = _twos_comp(mag_z, 16)
 
-print("raw gyro (x y z) =", bin(gyro_x), bin(gyro_y), bin(gyro_z))
+print("raw gyro (x y z) =", repr(gyro))
 print("raw accel (x y z) =", bin(accel_x), bin(accel_y), bin(accel_z))
 print("raw mag (x y z) =", mag_x, mag_y, mag_z)
