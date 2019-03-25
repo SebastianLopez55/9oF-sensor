@@ -132,4 +132,4 @@ temperature = b.read_byte_data(xlg, reg['OUT_TEMP_L']) | ( (b.read_byte_data(xlg
 print("raw gyro (x y z) =", repr(gyro))
 print("raw accel (x y z) =", repr(accel))
 print("raw mag (x y z) =", repr(compass))
-print('raw temp =', bin(temperature))
+print('raw temp =', _twos_comp(temperature, 12))
