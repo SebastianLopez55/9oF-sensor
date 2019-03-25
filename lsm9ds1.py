@@ -124,7 +124,7 @@ def axisTuple(buff):
     z = (buff[5] << 8) | buff[4]
     return (_twos_comp(x, 16), _twos_comp(y, 16), _twos_comp(z, 16))
 
-gyro = axisTuple(b.read_block_data(xlg, reg['OUT_X_L_G']))
+gyro = axisTuple(b.read_i2c_block_data(xlg, reg['OUT_X_L_G']))
 # gyro_x = b.read_byte_data(xlg, reg['OUT_X_L_G']) | ( b.read_byte_data(xlg, reg['OUT_X_H_G']) << 8 )
 # gyro_x = _twos_comp(gyro_x, 16)
 # gyro_y = b.read_byte_data(xlg, reg['OUT_Y_L_G']) | ( b.read_byte_data(xlg, reg['OUT_Y_H_G']) << 8 )
