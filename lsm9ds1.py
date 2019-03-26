@@ -127,9 +127,9 @@ def axisTuple(buff):
 gyro = axisTuple(b.read_i2c_block_data(xlg, reg['OUT_X_L_G']))
 accel = axisTuple(b.read_i2c_block_data(xlg, reg['OUT_X_L_XL']))
 compass = axisTuple(b.read_i2c_block_data(mag, reg['OUT_X_L_M']))
-temperature = b.read_byte_data(xlg, reg['OUT_TEMP_L']) | ( (b.read_byte_data(xlg, reg['OUT_TEMP_H']) & 0x0F) << 8 )
+temperature = _twos_comp(b.read_byte_data(xlg, reg['OUT_TEMP_L']) | ( (b.read_byte_data(xlg, reg['OUT_TEMP_H']) & 0x0F) << 8 ), 12)
 
 print("raw gyro (x y z) =", repr(gyro))
 print("raw accel (x y z) =", repr(accel))
 print("raw mag (x y z) =", repr(compass))
-print('raw temp =', _twos_comp(temperature, 12))
+print('raw temp =', temperature)
