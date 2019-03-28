@@ -127,9 +127,18 @@ def axisTuple(buff):
 gyro = axisTuple(b.read_i2c_block_data(xlg, reg['OUT_X_L_G']))
 accel = axisTuple(b.read_i2c_block_data(xlg, reg['OUT_X_L_XL']))
 compass = axisTuple(b.read_i2c_block_data(mag, reg['OUT_X_L_M']))
-temperature = b.read_byte_data(xlg, reg['OUT_TEMP_L']) | ( (b.read_byte_data(xlg, reg['OUT_TEMP_H']) & 0x0F) << 8 )
+
+def getGyro():
+    return (gyro[0] * 0.00875, gyro[1] * 0.00875, gyro[2] * 0.00875)
+
+def getTemp_raw():
+    return _twos_comp(b.read_byte_data(xlg, reg['OUT_TEMP_L']) | ( (b.read_byte_data(xlg, reg['OUT_TEMP_H']) & 0x0F) << 8 ), 12)
+# temperature sensor not that accurate nor meant for ambiant readings (it's meant to keep the gyroscope sensor in check)
+# this is the best guess according to https://github.com/kriswiner/LSM9DS1/issues/3#issuecomment-180558929
+def getTemp():
+    return getTemp_raw() / 16.0 + 27.5
 
 print("raw gyro (x y z) =", repr(gyro))
 print("raw accel (x y z) =", repr(accel))
 print("raw mag (x y z) =", repr(compass))
-print('raw temp =', _twos_comp(temperature, 12))
+print('raw temp =', getTemp())
